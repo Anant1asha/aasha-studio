@@ -1,0 +1,46 @@
+name: Release Windows Desktop App (Tauri v2)
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release-windows:
+    permissions:
+      contents: write
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Rust Stable & MSVC
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Desktop GUI & Core
+        run: npm run build
+
+      - name: Build Tauri v2 Windows Installer (.msi / .exe)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'AASHA Studio ${{ github.ref_name }}'
+          releaseBody: 'Automated Windows desktop release built with Tauri v2. No Rust or Node required for end users.'
+          releaseDraft: false
+          prerelease: false
+          args: --target x86_64-pc-windows-msvc

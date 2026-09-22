@@ -1,0 +1,17 @@
+{
+  "name": "@aasha/cli",
+  "version": "1.0.0",
+  "description": "Zero-prerequisite CLI and local browser studio for AASHA textbook transformation",
+  "bin": {
+    "aasha": "./bin/aasha.js"
+  },
+  "main": "bin/aasha.js",
+  "scripts": {
+    "start": "node bin/aasha.js",
+    "studio": "node bin/aasha.js studio"
+  },
+  "dependencies": {
+    "@aasha/engine": "file:../../packages/core"
+  },
+  "license": "AGPL-3.0"
+}

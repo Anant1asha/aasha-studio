@@ -1,0 +1,20 @@
+[package]
+name = "aasha-studio"
+version = "1.0.0"
+description = "AASHA AI Learning & Gamified Assessment Desktop App"
+authors = ["AASHA Contributors"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2.0.0-rc", features = [] }
+
+[dependencies]
+tauri = { version = "2.0.0-rc", features = [] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+keyring = "2.1"
+tokio = { version = "1", features = ["full"] }
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]

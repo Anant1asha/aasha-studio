@@ -1,0 +1,30 @@
+{
+  "name": "aasha-studio-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Open-source AI tool & super agent transforming school textbook PDFs into interactive visual learning and gamified assessments.",
+  "workspaces": [
+    "packages/core",
+    "apps/cli",
+    "apps/studio-ui"
+  ],
+  "scripts": {
+    "build": "npm run --workspaces --if-present build",
+    "test": "npm run --workspaces --if-present test",
+    "cli": "npm run --workspace=apps/cli start --",
+    "studio": "npm run --workspace=apps/cli studio"
+  },
+  "keywords": [
+    "education",
+    "ai",
+    "interactive-learning",
+    "ncert",
+    "gamified-assessment",
+    "llm",
+    "tauri",
+    "openrouter",
+    "gemini"
+  ],
+  "author": "AASHA Open Source Contributors",
+  "license": "AGPL-3.0"
+}
