@@ -28,9 +28,9 @@ jobs:
           targets: x86_64-pc-windows-msvc
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Build Desktop GUI & Core
+      - name: Build Core Engine & Web Studio
         run: npm run build
 
       - name: Build Tauri v2 Windows Installer (.msi / .exe)
@@ -40,7 +40,32 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: 'AASHA Studio ${{ github.ref_name }}'
-          releaseBody: 'Automated Windows desktop release built with Tauri v2. No Rust or Node required for end users.'
+          releaseBody: |
+            ## 🚀 AASHA Studio Windows Desktop Release
+            
+            Transform any school textbook PDF into interactive visual learning & gamified assessments.
+            
+            ### 📦 Installation Instructions
+            1. Download `AASHA-Studio-Setup.exe` or the `.msi` installer below.
+            2. Run the installer (Zero prerequisites: Node or Rust are NOT required).
+            3. Explore the 5 pre-bundled offline demo chapters or provide your OpenRouter / Gemini key to transform your own PDFs.
+            
+            ---
+            *Built automatically via GitHub Actions with Tauri v2.*
           releaseDraft: false
           prerelease: false
           args: --target x86_64-pc-windows-msvc
+
+      - name: Sign with SignPath Foundation (Conditional)
+        if: env.SIGNPATH_API_TOKEN != ''
+        uses: SignPath/github-action-submit-signing-request@v1
+        env:
+          SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: 'aasha-studio'
+          signing-policy-slug: 'release-signing'
+          artifact-configuration-slug: 'windows-installer'
+          wait-for-completion: true
+          output-artifact-directory: 'signed-artifacts'
