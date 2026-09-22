@@ -18,6 +18,9 @@ We solved the native desktop build barrier (Rust + Microsoft C++ Build Tools) by
 | **Tier 2: Universal CLI** | Developers, Automated Pipelines | **Node.js 18+** only | `npx @aasha/cli ingest chapter.pdf` |
 | **Tier 3: Browser Studio GUI** | Developers without Rust | **Node.js 18+** only | `npx @aasha/cli studio` (opens in Edge/Chrome) |
 
+> [!NOTE]
+> **Windows SmartScreen Notice**: For initial releases while SignPath Foundation Authenticode certificate review is in progress, Windows may display *"Windows protected your PC"*. Simply click **"More info"** $\rightarrow$ **"Run anyway"**. All binaries are compiled transparently on GitHub Actions.
+
 ---
 
 ## 🔒 Bring-Your-Own-Key (BYOK) & Privacy

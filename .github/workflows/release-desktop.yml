@@ -48,6 +48,7 @@ jobs:
             ### 📦 Installation Instructions
             1. Download `AASHA-Studio-Setup.exe` or the `.msi` installer below.
             2. Run the installer (Zero prerequisites: Node or Rust are NOT required).
+               > **Note on Windows SmartScreen**: If Windows displays *"Windows protected your PC"*, click **"More info"** $\rightarrow$ **"Run anyway"**. (Authenticode certification via SignPath Foundation is pending review; all binaries match the verified SHA-256 checksums).
             3. Explore the 5 pre-bundled offline demo chapters or provide your OpenRouter / Gemini key to transform your own PDFs.
             
             ---
