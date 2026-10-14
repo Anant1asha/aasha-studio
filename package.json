@@ -6,6 +6,7 @@
   "workspaces": [
     "packages/core",
     "apps/cli",
+    "apps/desktop-tauri",
     "apps/studio-ui"
   ],
   "scripts": {

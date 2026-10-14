@@ -11,7 +11,7 @@
     "studio": "node bin/aasha.js studio"
   },
   "dependencies": {
-    "@aasha/engine": "file:../../packages/core"
+    "@aasha/engine": "*"
   },
   "license": "AGPL-3.0"
 }
