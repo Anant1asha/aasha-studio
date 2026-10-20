@@ -12,8 +12,8 @@ jobs:
       contents: write
     runs-on: windows-latest
     env:
-      SIGNPATH_API_TOKEN: ${{ secrets[format('{0}', 'SIGNPATH_API_TOKEN')] }}
-      SIGNPATH_ORGANIZATION_ID: ${{ secrets[format('{0}', 'SIGNPATH_ORGANIZATION_ID')] }}
+      SIGNPATH_API_TOKEN: ${{ fromJSON(toJSON(secrets))['SIGNPATH_API_TOKEN'] }}
+      SIGNPATH_ORGANIZATION_ID: ${{ fromJSON(toJSON(secrets))['SIGNPATH_ORGANIZATION_ID'] }}
 
     steps:
       - name: Checkout Repository

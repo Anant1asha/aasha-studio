@@ -22,7 +22,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     env:
-      NPM_TOKEN: ${{ secrets[format('{0}', 'NPM_TOKEN')] }}
+      NPM_TOKEN: ${{ fromJSON(toJSON(secrets))['NPM_TOKEN'] }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
