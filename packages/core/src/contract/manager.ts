@@ -43,7 +43,7 @@ export class ChapterContractManager {
    * Automatically matches the best prebuilt open-source foundation (F01-F20)
    * and generates the Mandatory Resource Match Report.
    */
-  generateResourceMatchReport(subject: string, classNum: number, topic: string): { report: string; best: any } {
+  generateResourceMatchReport(subject: string, classNum: number, topic: string): { report: string; best: any | null } {
     let registry: any = { foundations: [] };
     if (fs.existsSync(this.registryPath)) {
       try {
@@ -59,16 +59,10 @@ export class ChapterContractManager {
       return matchSubject && matchClass;
     });
 
-    const best = matches.length > 0 ? matches[0] : (registry.foundations[0] || {
-      id: 'F01',
-      name: 'Escape Run',
-      repo: 'https://github.com/abhas9/escape-run',
-      license: 'MIT',
-      mechanics: ['adaptive_practice', 'mastery_gating', 'spaced_repetition'],
-      reuse_strategy: 'EXTRACT'
-    });
+    const best = matches[0] || null;
 
-    const matchedNames = matches.map((m: any) => `${m.name} (${m.id}: ${m.reuse_strategy})`).join(', ');
+    const matchedNames = matches.map((m: any) => `${m.name} (${m.id}: ${m.reuse_strategy || 'UNKNOWN'})`).join(', ');
+    const selectedResource = best?.name || 'None';
 
     const report = `### RESOURCE MATCH REPORT
 - **Chapter**: ${topic}
@@ -77,22 +71,22 @@ export class ChapterContractManager {
 - **Learning Objectives**:
   1. Understand, reason, and visualize the core mechanics of ${topic}
   2. Diagnose and correct student misconceptions without leaking answers
-- **Best Existing Experiences**: ${matchedNames || 'Escape Run (F01), MicroSims (F02)'}
-- **Best Reusable Mechanics**: ${best.mechanics ? best.mechanics.join(', ') : 'concept_simulations, parameter_sliders'}
-- **Best Simulations**: ${best.name} (${best.repo || 'Open-Source Catalog'})
-- **Best Narrative / Escape Structures**: Escapp (F09) progressive clue pattern / Chocolate Broccoli Challenge (F19) Observe->Decide->Act->Result
-- **Existing Coverage**: 85%
-- **New Work Required**: 15% (Adapting UI to AashaExperienceContract & Indic dictionary tokens)
-- **Reuse Strategy**: ${best.reuse_strategy || 'EXTRACT'}
-- **License Status**: PASS (${best.license || 'MIT'})
-- **Offline**: PASS (Zero remote CDN scripts)
-- **Mobile**: PASS (Fits same-frame mobile viewport, min 44px touch targets)
-- **Accessibility**: PASS (High contrast, readable typography)
-- **Localization**: PASS (Bilingual dictionary lookup in window.WM)
-- **AI Integration**: PASS (Pre-seeded in Knowledge Graph and Context Bus)
-- **Mastery**: PASS (4-stage progressive hints + zero spoiler feedback)
-- **Telemetry**: PASS (AashaExperienceContract telemetry event bus)
-- **Final Recommendation**: DO NOT BUILD FROM SCRATCH. Wrap and adapt ${best.name} under AashaExperienceContract.`;
+- **Matching Registry Candidates**: ${matchedNames || 'No matching resource found'}
+- **Selected Registry Candidate**: ${selectedResource}
+- **Candidate Mechanics**: ${best?.mechanics ? best.mechanics.join(', ') : 'UNKNOWN'}
+- **Candidate Source**: ${best?.repo || 'UNKNOWN'}
+- **Existing Coverage**: UNKNOWN (not measured)
+- **New Work Required**: UNKNOWN (not measured)
+- **Reuse Strategy**: ${best?.reuse_strategy || 'UNKNOWN'}
+- **License Status**: UNKNOWN (registry metadata is not a license review)
+- **Offline**: UNKNOWN (not validated)
+- **Mobile**: UNKNOWN (not validated)
+- **Accessibility**: UNKNOWN (not validated)
+- **Localization**: UNKNOWN (not validated)
+- **AI Integration**: UNKNOWN (not validated)
+- **Mastery**: UNKNOWN (not validated)
+- **Telemetry**: UNKNOWN (not validated)
+- **Final Recommendation**: ${best ? 'Manually review the candidate and its evidence before reuse.' : 'No match. Do not select or reuse a fallback resource.'}`;
 
     return { report, best };
   }
@@ -123,13 +117,22 @@ chapter_meta:
   created_at: "${new Date().toISOString()}"
 
 resource_match_report:
-  matched_foundation_id: "${best.id}"
-  matched_foundation_name: "${best.name}"
-  source_repo: "${best.repo || ''}"
-  reuse_strategy: "${best.reuse_strategy || 'EXTRACT'}"
-  license: "${best.license || 'MIT'}"
-  telemetry_compliant: true
-  same_frame_mobile_viewport: true
+  match_status: "${best ? 'MATCHED' : 'NO_MATCH'}"
+  matched_foundation_id: ${best?.id ? JSON.stringify(best.id) : 'null'}
+  matched_foundation_name: ${best?.name ? JSON.stringify(best.name) : 'null'}
+  source_repo: ${best?.repo ? JSON.stringify(best.repo) : 'null'}
+  reuse_strategy: ${best?.reuse_strategy ? JSON.stringify(best.reuse_strategy) : 'null'}
+  license_metadata: ${best?.license ? JSON.stringify(best.license) : 'null'}
+  license_status: "UNKNOWN"
+  offline_status: "UNKNOWN"
+  mobile_status: "UNKNOWN"
+  accessibility_status: "UNKNOWN"
+  localization_status: "UNKNOWN"
+  ai_integration_status: "UNKNOWN"
+  mastery_status: "UNKNOWN"
+  telemetry_status: "UNKNOWN"
+  telemetry_compliant: "UNKNOWN"
+  same_frame_mobile_viewport: "UNKNOWN"
 
 pedagogy_structure:
   golden_rule_stages:
@@ -164,7 +167,7 @@ misconceptions:
 
 simulation_adapter:
   contract_interface: "AashaExperienceContract"
-  target_foundation: "${best.id}"
+  target_foundation: ${best?.id ? JSON.stringify(best.id) : 'null'}
   container_id: "sim-container"
   methods_implemented:
     - "mount"
@@ -190,3 +193,4 @@ lle_bilingual_insulation:
     };
   }
 }
+
